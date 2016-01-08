@@ -1,0 +1,67 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  config.vm.network :public_network{{ interface }}
+  config.ssh.insert_key = "false"  
+
+  config.vm.synced_folder "./test_scripts", "/home/vagrant/test_scripts"
+  config.vm.synced_folder "./settings", "/home/vagrant/settings"
+  config.vm.synced_folder "./scripts", "/home/vagrant/scripts"
+  config.vm.synced_folder "./logs", "/home/vagrant/logs"
+  config.vm.provision "shell", path: "./scripts/networking.py", args: "{{ log_type }} /home/vagrant/logs/$( hostname )_proxy_output"
+
+  config.trigger.before :destroy do
+    info "Unsubscribing the virtual machine from redhat"
+    run_remote  "bash -x /home/vagrant/scripts/redhat_cleanup.sh"
+  end 
+
+  config.vm.define "db" do |db| 
+
+    db.vm.hostname = "db"
+    db.vm.box="{{ db_box }}"
+    db.ssh.pty={{ db_pty }}
+
+    db.vm.network "private_network", ip: "192.168.50.10"
+    db.vm.provider "virtualbox" do |v|
+    	 v.memory = 2048
+    	 v.cpus = 2
+    end
+    db.vm.synced_folder "./files", "/home/vagrant/files"
+    db.vm.provision "shell", path: "./scripts/db.sh", args: "{{ log_type }} /home/vagrant/logs/db_script_output"
+  end
+  
+  
+  config.vm.define "icat" do |icat|
+
+		icat.vm.box="{{ icat_box }}"
+    icat.ssh.pty={{ icat_pty }}
+    icat.vm.hostname = "icat"
+    # Forward a port from the guest to the host, which allows for outside
+    # computers to access the VM, whereas host-only networking does not.
+    icat.vm.network "forwarded_port", guest: 1247, host: 1247
+    icat.vm.network "forwarded_port", guest: 22, host: 50022
+    icat.vm.network "private_network", ip: "192.168.50.11"
+    icat.vm.synced_folder "./files", "/home/vagrant/files"
+  		
+    icat.vm.provision "shell", path: "./scripts/irods.sh", args: "{{ log_type }} /home/vagrant/logs/icat_script_output"
+
+  end
+
+
+  ip_counter = 11
+  if {{ num_nodes }} != 0
+    (1..{{ num_nodes }}).each do |i|
+
+      config.vm.define "ires#{i}" do |ires|
+        ires.vm.hostname="ires#{i}"
+        ires.vm.box="{{ ires_box }}"
+        ires.vm.network "private_network", ip: "192.168.50."+(ip_counter+i).to_s
+        ires.vm.provision "shell", path: "./scripts/irods.sh", args: "{{ log_type }} /home/vagrant/logs/$( hostname )_script_output"
+      end  
+    end
+  end
+  
+end
+

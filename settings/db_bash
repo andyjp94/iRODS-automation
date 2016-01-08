@@ -1,0 +1,16 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+
+# User specific aliases and functions
+export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/vagrant/.local/bin:/home/vagrant/bin:/u01/app/oracle/product/11.2.0/xe/bin
+export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe/bin
+export ORACLE_SID=XE
+export LD_LIBRARY_PATH=/u01/app/oracle/product/11.2.0/xe/bin
+export http_proxy=http://wwwcache.sanger.ac.uk:3128
+export https_proxy=http://wwwcache.sanger.ac.uk:3128
+

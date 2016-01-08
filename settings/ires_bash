@@ -1,0 +1,7 @@
+# .bashrc
+
+# User specific aliases and functions
+export PATH=/usr/bin:/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/vagrant/.local/bin:/home/vagrant/bin:/usr/local/iRODS/clients/icommands/bin
+export http_proxy=http://wwwcache.sanger.ac.uk:3128
+export https_proxy=http://wwwcache.sanger.ac.uk:3128
+
