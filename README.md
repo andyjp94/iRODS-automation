@@ -1,6 +1,6 @@
-# iRODS_auto
+# iRODS automation
 
-TODO: This project aims to create a testing platform for iRODS. This testing platform currently supports version 3.3.1, 4.1.[4..7] with 4.1.8 coming soon! 
+This project aims to create a testing platform for iRODS. This testing platform currently supports version 3.3.1, 4.1.[4..7] with 4.1.8 coming soon! 
 
 ## Installation
 
