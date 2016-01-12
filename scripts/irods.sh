@@ -197,7 +197,7 @@ os(){
 		;;
 		"ubuntu14")
 			apt-get -y update
-			apt-get -y install postgresql libjson-perl python-psutil python-requests unixodbc odbc-postgresql super python-jsonschema
+			apt-get -y install postgresql libjson-perl python-psutil python-requests unixodbc odbc-postgresql super python-jsonschema git unzip libaio-dev	
 		;;
 		"redhat")
 			cp /home/vagrant/settings/icat_bash .bashrc
